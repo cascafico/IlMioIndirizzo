@@ -9,7 +9,7 @@ Indirizzo preset is for reporting addresses recording the following fields:
 * housenumber,
 * street,
 * postcode (optional),
-* city (optional),
+* city,
 * description (optional).
 
 ## Usage
