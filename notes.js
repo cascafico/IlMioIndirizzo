@@ -2,6 +2,7 @@ var share_text = 'Ho appena inserito il mio indirizzo su OpenStreetMap, il datab
 var share_url = "https://naposm.github.io/indirizzo/";
 
 function sendNote() {
+$('#form').submit(function(event) {
     event.preventDefault();
     // non permette di inviare i dati se l'accuratezza supera i 20m
     if (stato == 0) $("#sending-information").html('<div class="alert alert-warning" role="alert">🛰️ Attendi che l\' accuratezza della posizione migliori, la spia da rossa o gialla deve diventare 🟢 verde!</div>');
@@ -9,21 +10,24 @@ function sendNote() {
       // Verifica Dei Campi
       if (typeof lat == "undefined") {
         $("#sending-information").html('<div class="alert alert-danger text-center" role="alert"><p class="h3">😵 Dove sei? 😵</p><p class="h5">Non hai inserito alcuna posizione!</p><small>Ci hai dato tutte le informazioni di cui avevamo bisogno, ma così non riusciremo mai a sapere dove inserirle. 🤔</small></div>');
+        $("#form").addClass("was-validated");
         return false;
       }
       if ($("#strada").val() == "") {
-        alert("Il Campo Nome della strada non può essere vuoto");
+        $("#invalidStrada").html("Il Campo Nome della strada non può essere vuoto");
+        $("#form").addClass("was-validated");
         return false;
       }
       if ($("#civico").val() == "") {
-        alert("Il Campo Numero civico non può essere vuoto");
+        $("#invalidCivico").html("Il Campo Numero civico non può essere vuoto");
+        $("#form").addClass("was-validated");
         return false;
       }
       if ($("#comune").val() == "") {
-        alert("Il Campo Comune non può essere vuoto");
+        $("#invalidComune").html("Il Campo Comune non può essere vuoto");
+        $("#form").addClass("was-validated");
         return false;
       }
-      $("#form").addClass("was-validated");
 
       //Creazione testo da inserire nella nota
       // Inserisce node : lat, lon per Level0
@@ -56,10 +60,10 @@ function sendNote() {
         testo = "[SELEZIONATO SU MAPPA (dist. " + distGPStoSelection + ")]\n\n" + testo;
       }
       // Invia i dati a osm
-      // https://api.openstreetmap.org/api/0.6/notes?lat=51.00&lon=0.1&text=ThisIsANote
+      // https://api.openstreetmap.org/api/0.6/notes?lat=51.00&lon=0.1&text=ThisIsANote https://api.openstreetmap.org/api/0.6/notes?
       $.ajax({
         type: "POST",
-        url: "https://api.openstreetmap.org/api/0.6/notes?",
+        url: "",
         data: "lat=" + lat + "&lon=" + lon + "&text=" + testo,
         dataType: "html",
         success: function(msg) {
@@ -86,4 +90,6 @@ function sendNote() {
     confetti.start(2000);
 
     return false;
+  }
+);
 }
