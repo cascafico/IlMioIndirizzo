@@ -3,11 +3,9 @@ var share_url = "https://naposm.github.io/indirizzo/";
 
 function sendNote() {
     event.preventDefault();
-
     // non permette di inviare i dati se l'accuratezza supera i 20m
     if (stato == 0) $("#sending-information").html('<div class="alert alert-warning" role="alert">🛰️ Attendi che l\' accuratezza della posizione migliori, la spia da rossa o gialla deve diventare 🟢 verde!</div>');
     else {
-
       // Verifica Dei Campi
       if (typeof lat == "undefined") {
         $("#sending-information").html('<div class="alert alert-danger text-center" role="alert"><p class="h3">😵 Dove sei? 😵</p><p class="h5">Non hai inserito alcuna posizione!</p><small>Ci hai dato tutte le informazioni di cui avevamo bisogno, ma così non riusciremo mai a sapere dove inserirle. 🤔</small></div>');
@@ -25,6 +23,7 @@ function sendNote() {
         alert("Il Campo Comune non può essere vuoto");
         return false;
       }
+      $("#form").addClass("was-validated");
 
       //Creazione testo da inserire nella nota
       // Inserisce node : lat, lon per Level0
@@ -48,7 +47,7 @@ function sendNote() {
       // Inserisce un avviso se manca il CAP
       if (nopostcode && $("#cap").val() != ""){
         testo += "\n\n⌈ ⚠️ ATTENZIONE: A questa città mancano i dati sul CAP! ⚠️                             ⌉\n" +
-                     "Per inserirlo andare nella relazione della città e inserire: \" postal_code:" + $("#cap").val() + " \"" ;
+                     "Per inserirlo andare nella relazione della città e inserire: \" postal_code=" + $("#cap").val() + " \"" ;
       }
 
       testo +=  "\n\nQuesta nota è stata generata automaticamente dal tool di segnalazione di indirizzi.\n https://naposm.github.io/indirizzo/\n #AggiuntoIndirizzo";
@@ -81,6 +80,7 @@ function sendNote() {
 
       $("#sending-information").html('<div class="alert alert-success text-center" role="alert"><p class="h3">Evviva! 🎉</p>I dati sono stati inviati! Grazie mille per aver contribuito ❤️</div><p class="font-weight-light text-muted mt-4">Ecco come apparirà il tuo messaggio:</p><div class="w-100"><img src="https://wiki.openstreetmap.org/w/images/d/d0/Open_note_marker.png" alt="" class="mx-auto d-block"></div><div class="note">' + testo.replace(new RegExp('\r?\n', 'g'), '<br />') + sharing);
       $('#form')[0].reset();
+      $("#form").removeClass("was-validated");
     }
 
     confetti.start(2000);
