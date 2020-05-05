@@ -2,8 +2,21 @@ var share_text = 'Ho appena inserito il mio indirizzo su OpenStreetMap, il datab
 var share_url = "https://naposm.github.io/indirizzo/";
 
 function sendNote() {
+  $("input").change(function() {
+    console.log($(this)[0].checkValidity());
+    if($(this)[0].checkValidity()){
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+    } else {
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+    }
+}
+);
+
 $('#form').submit(function(event) {
     event.preventDefault();
+
     // non permette di inviare i dati se l'accuratezza supera i 20m
     if (stato == 0) $("#sending-information").html('<div class="alert alert-warning" role="alert">🛰️ Attendi che l\' accuratezza della posizione migliori, la spia da rossa o gialla deve diventare 🟢 verde!</div>');
     else {
@@ -15,17 +28,14 @@ $('#form').submit(function(event) {
       }
       if ($("#strada").val() == "") {
         $("#invalidStrada").html("Il Campo Nome della strada non può essere vuoto");
-        $("#form").addClass("was-validated");
         return false;
       }
       if ($("#civico").val() == "") {
         $("#invalidCivico").html("Il Campo Numero civico non può essere vuoto");
-        $("#form").addClass("was-validated");
         return false;
       }
       if ($("#comune").val() == "") {
         $("#invalidComune").html("Il Campo Comune non può essere vuoto");
-        $("#form").addClass("was-validated");
         return false;
       }
 
